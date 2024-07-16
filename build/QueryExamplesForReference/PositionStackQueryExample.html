@@ -1,0 +1,20 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$( document ).ready(function(){
+    //user input
+    var coordString = "39.55532574974147,-5.0625"
+    //appID and key
+    var key = "ec16e811d654f74e28ffe0acccf5a092"
+    var queryURL = "http://api.positionstack.com/v1/reverse?access_key=" + key + "&query=" + coordString
+    //              http://api.positionstack.com/v1/reverse?access_key=ec16e811d654f74e28ffe0acccf5a092&query=40.7638435,-73.9729691
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+
+      .then(function(response) {
+          console.log(response.data[0].country)
+      })
+}
+)
+</script>

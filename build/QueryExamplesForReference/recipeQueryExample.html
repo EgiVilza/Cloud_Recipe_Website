@@ -1,0 +1,22 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$( document ).ready(function(){
+    //user input
+    var foodSearch = "chicken"
+    //appID and key
+    var appID = "349b98ef"
+    var key = "5e98e5359fcce19875540fb80e3daf8a"
+    var queryURL = "https://api.edamam.com/search?q=" + foodSearch + "&app_id=" + appID + "&app_key=" + key
+    //              https://api.edamam.com/search?q=chicken&app_id=349b98ef&app_key=5e98e5359fcce19875540fb80e3daf8a
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+
+      .then(function(response) {
+          console.log(queryURL)
+          console.log(response)
+      })
+}
+)
+</script>

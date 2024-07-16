@@ -1,0 +1,23 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$( document ).ready(function(){
+    //user input
+    var foodType = "large apple"
+    var foodAmount ="1"
+    var foodSearch = foodAmount + foodType
+    //appID and key
+    var appID = "78c7f65d"
+    var key = "8b2dee41720c2648b3c26cff571ab766"
+    var queryURL = "https://api.edamam.com/api/nutrition-data?app_id=" + appID  + "&app_key=" + key + "&ingr=" + foodSearch
+    //              https://api.edamam.com/api/nutrition-data?app_id=78c7f65d&app_key=8b2dee41720c2648b3c26cff571ab766&ingr=1%20large%20apple
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+
+      .then(function(response) {
+          console.log(response)
+      })
+}
+)
+</script>

@@ -1,0 +1,142 @@
+/*Links for navigation bar*/
+a:link {
+    text-decoration: none;
+    color: white;
+    
+}
+
+/*Height of Recipe Results*/
+.fullrow {
+    min-height: 10vh;
+}
+
+.searchBox {
+    margin-top: 10px;
+}
+
+.collapsibleStyle {
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+/*Helpful Note for collapsible style*/
+#note {
+    text-align: center;
+    font-size: 16px;
+    margin-right: 10%;
+    margin-left: 10%;   
+}
+
+/*map.html*/
+.mapImage {
+    position: relative;
+    margin-bottom: 5%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*map.html*/
+.mapTitle {
+    text-align: center;
+}
+
+/*Advanced Page*/
+.excludedIngredints {
+    display: inline;
+    text-align: center;
+}
+
+/*Advanced Page*/
+#excludedList {
+    display: inline;
+}
+
+/*Advanced Page*/
+.advancedFilters {
+    border: solid;
+    margin-top: 40px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+/*Advanced Page*/
+.addTo {
+    margin-left: 2%;
+    text-align: left;
+}
+
+/*Advanced Page*/
+.healthLabels {
+    margin-left: 1%;
+}
+
+/*Advanced Page*/
+.diet {
+    margin-left: 1%;
+}
+
+/*Advanced Page*/
+#excludedListTitle {
+    font-size: 20px;
+    margin-bottom: 50px;
+}
+
+/*Advanced Page*/
+#advancedPageTitle {
+    text-align: center;
+    font-size: 25px;
+}
+
+/*Advanced Page*/
+.excludedListing {
+    margin-top: -5%;
+}
+
+.hero {
+    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+    background-image: url("pexels-lukas-349610.jpg");
+  
+    /* Set a specific height */
+    height: 900px;
+  
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.container {
+    margin-bottom: -50px;
+    background-color: white;
+    
+}
+
+#searchStyle {
+    border-radius: 5px;
+}
+
+#resultStyle {
+    border-radius: 5px;
+    margin-bottom: 100vh;
+}
+
+#indexTitle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.whiteBackground {
+    background-color: white;
+}
+
+.recipeResultsStyle {
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+.nav-wrapper {
+    padding-left: 20px
+}

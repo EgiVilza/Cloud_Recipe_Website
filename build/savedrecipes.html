@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Saved Recipes</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <nav>
+        <div class="white-text nav-wrapper">
+            <a href="#" class="brand-logo">Recipe Generator</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="map.html">World Recipes</a></li>
+                <li><a href="advanced.html">Advanced</a></li>
+                <li><a href="#">Saved</a></li>
+            </ul>
+        </div>
+    </nav>
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="map.html">World Recipes</a></li>
+        <li><a href="advanced.html">Advanced</a></li>
+        <li><a href="#">Saved</a></li>
+    </ul>
+
+    <div class="hero">
+        <div class="container" id="searchStyle">
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <h2 id="indexTitle">Saved Recipes</h2>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container" id="resultStyle">
+            <div class="row fullrow">
+                <div class="container">
+                    <div id="note">Click Recipes to Uncollapse</div>
+                    <ul id="recipe-container" class="collapsible expandable"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script type="text/javascript">
+        //Materilize function for navbar
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+        var elem = document.querySelector('.collapsible.expandable');
+        var instance = M.Collapsible.init(elem, {
+            accordion: false
+        });
+
+        var savedRecipes = []
+
+        //Function to re-write all recipes to list from storage
+        function writeRecipes() {
+
+            //delete previously written recipes
+            console.log("Writing...");
+            $("#recipe-container").empty();
+
+            //get stored recipes from local storage
+            var savedRecipes = JSON.parse(localStorage.getItem("savedRecipes"));
+            console.log("Initial");
+            console.log(savedRecipes);
+
+            //Loop through recipes array and write each
+            for (i = 0; i < savedRecipes.length; i++) {
+
+                //save recipe title, image, and ingredients array to variables
+                var foodTitle = savedRecipes[i].foodTitle
+                var foodImage = savedRecipes[i].foodImage
+                var ingredients = savedRecipes[i].ingredients
+                var prep = savedRecipes[i].prep
+
+                //select container element
+                var container = $("#recipe-container");
+                //create and append new list item, with id
+                var newRecipe = $("<li>");
+                container.append(newRecipe);
+                newRecipe.attr("id", i);
+
+                //create and append header div
+                var header = $("<div>");
+                newRecipe.append(header);
+                header.addClass("collapsible-header");
+                header.text(foodTitle)
+
+                //create and append body div
+                var body = $("<div>");
+                newRecipe.append(body);
+                body.addClass("collapsible-body");
+
+                //Create and append organizing grid containers
+                var row = $("<div>");
+                var left = $("<div>");
+                var middle = $("<div>");
+                var right = $("<div>");
+                row.addClass("row");
+                left.addClass("col s4");
+                right.addClass("col s8");
+                body.append(row);
+                row.append(left);
+                row.append(right);
+
+                //Create and append image using recipe image
+                var image = $("<img>");
+                image.attr("src", foodImage);
+                image.addClass("responsive-img");
+                left.append(image);
+
+                //Create and append "Ingredients" title
+                var ingredientTitle = $("<h5>");
+                ingredientTitle.text("Ingredients:");
+                right.append(ingredientTitle);
+
+                //Create and append a list container inside body
+                var ingredientList = $("<ul>");
+                right.append(ingredientList);
+
+                //loop through ingredients array and add list items for each
+                for (j = 0; j < ingredients.length; j++) {
+                    var newItem = $("<li>");
+                    ingredientList.append(newItem);
+                    newItem.text(ingredients[j]);
+                }
+
+                //Create and append button to link to preperation instructions
+                var prepTitle = $("<h4>");
+                right.append(prepTitle);
+
+                var prepLink = $("<a>");
+                prepLink.text("Preparation");
+                prepLink.attr("href", prep);
+                prepLink.addClass("waves-effect waves-light btn");
+                prepTitle.append(prepLink);
+
+                //Create and append button delete current recipe
+                var deleteButton = $("<a>");
+                deleteButton.text("Delete");
+                deleteButton.attr("data-trash", i);
+                deleteButton.addClass("waves-effect waves-light btn red right trash");
+                prepTitle.append(deleteButton);
+
+                var trashIcon = $("<i>");
+                trashIcon.addClass("material-icons right");
+                trashIcon.text("delete");
+                deleteButton.append(trashIcon);
+
+            }
+
+        }
+
+        writeRecipes();
+
+        //Event listener for all buttons in recipe container
+        $("#recipe-container").on("click", "a", function (event) {
+
+            // //Take value from data-trash (only exists on delete buttons)
+            var deletedRecipe = $(this).data("trash")
+
+            if (deletedRecipe !== undefined) { //if button selected is not a delete button, skip this
+
+                //Pull saved recipes object from local storage
+                var savedRecipes = JSON.parse(localStorage.getItem("savedRecipes"));
+
+                //Remove recipe corresponding to delete button clicked
+                savedRecipes.splice(deletedRecipe, 1)
+
+                //Save new object back to storage
+                localStorage.setItem("savedRecipes", JSON.stringify(savedRecipes));
+                console.log("After")
+                console.log(savedRecipes)
+
+                //Write recipes from new saved array
+                writeRecipes();
+
+            }
+
+        });
+
+
+    </script>
+</body>
+
+</html>
