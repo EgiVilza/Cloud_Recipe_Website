@@ -14,10 +14,10 @@ variable "region" {
   type        = string
 }
 
-variable "bucket_name" {
-  description = "Bucket Name"
-  type = string
-}
+# variable "bucket_name" {
+#   description = "Bucket Name"
+#   type = string
+# }
 
 variable "zone" {
   description = "Zone"
@@ -29,4 +29,17 @@ variable "location_id" {
   description = "Location ID"
   default = "us-central"
   type    = string
+}
+
+variable "apis" {
+  description = "List of APIs to enable"
+  type = list(string)
+  default = [ 
+    "compute.googleapis.com",
+    "appengine.googleapis.com",
+    "container.googleapis.com",
+    "appengine.googleapis.com",
+    "containerregistry.googleapis.com",
+    "artifactregistry.googleapis.com",
+   ]
 }

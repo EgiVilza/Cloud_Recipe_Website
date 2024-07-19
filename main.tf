@@ -3,44 +3,10 @@ provider "google" {
   region  = var.region
 }
 
-# Enable Compute Engine API
-resource "google_project_service" "compute_engine" {
-  project = var.project_id
-  service = "compute.googleapis.com"
-
-  disable_dependent_services = true
-}
-
-# Enable App Engine API
-resource "google_project_service" "app_engine" {
-  project = var.project_id
-  service = "appengine.googleapis.com"
-
-  disable_dependent_services = true
-}
-
-# Enable Google Container Registry API - fix
-resource "google_project_service" "google_container_registry" {
-  project = var.project_id
-  service = "containerregistry.googleapis.com"
-
-  disable_dependent_services = true
-}
-
-# Enable Artifact Registry API
-resource "google_project_service" "artifact_registry" {
-  project = var.project_id
-  service = "artifactregistry.googleapis.com"
-
-  disable_dependent_services = true
-}
-
-# Enable Kubernetes Engine API
-resource "google_project_service" "kubernetes_engine" {
-  project = var.project_id
-  service = "container.googleapis.com"
-
-  disable_dependent_services = true
+module "enable_apis" {
+  source = "./modules/enable_apis"
+  project_id = var.project_id
+  apis = var.apis
 }
 
 # GCR Service Account
@@ -49,88 +15,90 @@ resource "google_service_account" "gcr_service_account" {
   display_name = "GCR Service Account"
 }
 
-# Creating App Bucket
-resource "google_storage_bucket" "recipe_app_bucket" {
-  name          = var.bucket_name
-  location      = "US"
-  force_destroy = true
+# Not Yet Implmented into modules#
 
-  website {
-    main_page_suffix = "build/index.html"
-    not_found_page   = "build/index.html"
-  }
-}
+# # Creating App Bucket
+# resource "google_storage_bucket" "recipe_app_bucket" {
+#   name          = var.bucket_name
+#   location      = "US"
+#   force_destroy = true
 
-# Creating App Bucket Object
-resource "google_storage_bucket_object" "recipe_app_bucket_object" {
-  for_each = fileset(path.module, "build/**")
+#   website {
+#     main_page_suffix = "build/index.html"
+#     not_found_page   = "build/index.html"
+#   }
+# }
 
-  name   = each.value
-  bucket = google_storage_bucket.recipe_app_bucket.name
-  source = "${path.module}/${each.value}"
+# # Creating App Bucket Object
+# resource "google_storage_bucket_object" "recipe_app_bucket_object" {
+#   for_each = fileset(path.module, "build/**")
 
-  depends_on = [google_storage_bucket.recipe_app_bucket]
-}
+#   name   = each.value
+#   bucket = google_storage_bucket.recipe_app_bucket.name
+#   source = "${path.module}/${each.value}"
 
-# All Users access to Storage Bucket
-resource "google_storage_bucket_iam_member" "all_users" {
-  bucket = google_storage_bucket.recipe_app_bucket.name
-  role   = "roles/storage.objectViewer"
-  member = "allUsers"
-}
+#   depends_on = [google_storage_bucket.recipe_app_bucket]
+# }
 
-# Creating Storage Admin Role
-resource "google_project_iam_binding" "gcr_service_account_binding" {
-  project = var.project_id
-  role    = "roles/storage.admin"
+# # All Users access to Storage Bucket
+# resource "google_storage_bucket_iam_member" "all_users" {
+#   bucket = google_storage_bucket.recipe_app_bucket.name
+#   role   = "roles/storage.objectViewer"
+#   member = "allUsers"
+# }
 
-  members = [
-    "serviceAccount:${google_service_account.gcr_service_account.email}"
-  ]
-}
+# # Creating Storage Admin Role
+# resource "google_project_iam_binding" "gcr_service_account_binding" {
+#   project = var.project_id
+#   role    = "roles/storage.admin"
 
-# Creating Primary Cluster
-resource "google_container_cluster" "primary" {
-  name     = "my-gke-cluster"
-  location = var.region
+#   members = [
+#     "serviceAccount:${google_service_account.gcr_service_account.email}"
+#   ]
+# }
 
-  initial_node_count = 1
+# # Creating Primary Cluster
+# resource "google_container_cluster" "primary" {
+#   name     = "my-gke-cluster"
+#   location = var.region
 
-  node_config {
-    machine_type = "e2-micro"
-  }
+#   initial_node_count = 1
 
-  deletion_protection = false
+#   node_config {
+#     machine_type = "e2-micro"
+#   }
 
-  depends_on = [google_project_service.kubernetes_engine]
-}
+#   deletion_protection = false
 
-# Creating Primary Node
-resource "google_container_node_pool" "primary_nodes" {
-  cluster  = google_container_cluster.primary.name
-  location = var.region
+#   depends_on = [google_project_service.kubernetes_engine]
+# }
 
-  node_count = 1
+# # Creating Primary Node
+# resource "google_container_node_pool" "primary_nodes" {
+#   cluster  = google_container_cluster.primary.name
+#   location = var.region
 
-  node_config {
-    preemptible  = false
-    machine_type = "e2-micro"
+#   node_count = 1
 
-    disk_type    = "pd-standard"
-    disk_size_gb = 50
+#   node_config {
+#     preemptible  = false
+#     machine_type = "e2-micro"
 
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
-  }
+#     disk_type    = "pd-standard"
+#     disk_size_gb = 50
 
-  management {
-    auto_upgrade = true
-    auto_repair  = true
-  }
+#     oauth_scopes = [
+#       "https://www.googleapis.com/auth/cloud-platform",
+#     ]
+#   }
 
-  depends_on = [google_project_service.kubernetes_engine]
-}
+#   management {
+#     auto_upgrade = true
+#     auto_repair  = true
+#   }
 
-# Whats next: Deploy docker image
+#   depends_on = [google_project_service.kubernetes_engine]
+# }
+
+# Whats next: Manage Terraform code & Deploy docker image
 # Note: Docker Image
