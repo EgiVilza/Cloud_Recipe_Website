@@ -4,18 +4,25 @@ provider "google" {
 }
 
 module "enable_apis" {
-  source = "./modules/enable_apis"
+  source     = "./modules/enable_apis"
   project_id = var.project_id
-  apis = var.apis
+  apis       = var.apis
 }
 
-# GCR Service Account
-resource "google_service_account" "gcr_service_account" {
-  account_id   = "gcr-service-account"
-  display_name = "GCR Service Account"
+module "gcp_iam" {
+  source     = "./modules/gcp_iam"
+  project_id = var.project_id
+  service_accounts = var.service_accounts
+  roles = {
+    "roles/storage.admin" = [
+      "serviceAccount:${module.gcp_iam.service_accounts_data["gcr-service-accounts"].email}",
+      ]
+    }
 }
 
-# Not Yet Implmented into modules#
+
+# Not Yet Implmented into modules #
+
 
 # # Creating App Bucket
 # resource "google_storage_bucket" "recipe_app_bucket" {

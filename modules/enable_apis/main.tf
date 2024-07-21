@@ -4,6 +4,6 @@ resource "google_project_service" "default" {
   project = var.project_id
   service = each.key
   disable_dependent_services = true
-  disable_on_destroy = false
+  # disable_on_destroy = false
 }
 
