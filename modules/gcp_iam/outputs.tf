@@ -8,6 +8,7 @@ output "service_accounts_data" {
   value = google_service_account.service_accounts
 }
 
+# For future coding purposes
 output "map_of_service_accounts_emails" {
   description = "A map of emails"
   value = { for k, v in google_service_account.service_accounts : k => v.email }
