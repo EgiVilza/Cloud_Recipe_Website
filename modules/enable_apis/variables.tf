@@ -1,11 +1,11 @@
 variable "project_id" {
   description = "The GCP Project ID"
-  type = string
+  type        = string
 }
 
 variable "apis" {
   description = "List of APIs to enable"
-  type = list(string)
+  type        = list(string)
   default = [
     "compute.googleapis.com",
     "appengine.googleapis.com",

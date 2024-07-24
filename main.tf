@@ -6,14 +6,15 @@ provider "google" {
 module "enable_apis" {
   source     = "./modules/enable_apis"
   project_id = var.project_id
-  apis       = [
-    "compute.googleapis.com",
-    "appengine.googleapis.com",
-  ]
+  # apis = [
+  #   "compute.googleapis.com",
+  #   "appengine.googleapis.com",2
+  # ]
 }
 
-module "gcp_iam" {
-  source     = "./modules/gcp_iam"
+#IAM project roles and members
+module "project_iam" {
+  source     = "./modules/gcp_iam/project_iam"
   project_id = var.project_id
 
   # IAM Service Accounts
@@ -22,66 +23,49 @@ module "gcp_iam" {
   # IAM Bindings
   roles = {
     "roles/storage.admin" = [
-      "serviceAccount:${module.gcp_iam.service_accounts_data["gcr-service-account"].email}",
-      ]
-    }
-
-  # Storage Bucket allUsers IAM
-  bucket_name = var.bucket_name
-  storage_bucket_roles = "roles/storage.objectViewer"
-  storage_bucket_members = "allUsers"
+      "serviceAccount:${module.project_iam.service_accounts_data["gcr-service-account"].email}",
+    ]
+  }
 }
 
-# module "storage" {
-#   source = "./modules/storage"
-#   file_path = path.module
-#   bucket_name = var.bucket_name
-# }
+# IAM Storage Bucket allUsers
+module "storage_iam" {
+  source                 = "./modules/gcp_iam/storage_iam"
+  bucket_name            = var.bucket_name
+  storage_bucket_roles   = "roles/storage.objectViewer"
+  storage_bucket_members = "allUsers"
 
-# Not Yet Implmented into modules #
+  depends_on = [ module.storage ]
+}
 
-# # Creating Primary Cluster
-# resource "google_container_cluster" "primary" {
-#   name     = "my-gke-cluster"
-#   location = var.region
+# Storage Bucket for build / Note: Possibly change module name
+module "storage" {
+  source      = "./modules/storage"
+  file_path   = path.module
+  bucket_name = var.bucket_name
+}
 
-#   initial_node_count = 1
+module "gke_cluster" {
+  source       = "./modules/containers/gke_cluster"
+  cluster_name = "my-gke-cluster"
+  location     = var.region
+  machine_type = "e2-micro"
+  node_count   = 1
 
-#   node_config {
-#     machine_type = "e2-micro"
-#   }
+  depends_on = [ module.enable_apis ]
+}
 
-#   deletion_protection = false
+module "node_pool" {
+  source       = "./modules/containers/node_pool"
+  cluster_name = "my-gke-cluster"
+  location     = var.region
+  machine_type = "e2-micro"
+  node_count   = 1
+  disk_type    = "pd-standard"
+  disk_size_gb = 50
 
-#   depends_on = [google_project_service.kubernetes_engine]
-# }
-
-# # Creating Primary Node
-# resource "google_container_node_pool" "primary_nodes" {
-#   cluster  = google_container_cluster.primary.name
-#   location = var.region
-
-#   node_count = 1
-
-#   node_config {
-#     preemptible  = false
-#     machine_type = "e2-micro"
-
-#     disk_type    = "pd-standard"
-#     disk_size_gb = 50
-
-#     oauth_scopes = [
-#       "https://www.googleapis.com/auth/cloud-platform",
-#     ]
-#   }
-
-#   management {
-#     auto_upgrade = true
-#     auto_repair  = true
-#   }
-
-#   depends_on = [google_project_service.kubernetes_engine]
-# }
+  depends_on = [ module.enable_apis, module.gke_cluster ]
+}
 
 # Whats next: Manage Terraform code & Deploy docker image
 # Note: Docker Image

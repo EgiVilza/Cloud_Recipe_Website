@@ -12,8 +12,8 @@ variable "credentials_file" {
 # Location Variables
 variable "location" {
   description = "Location"
-  default = "US"
-  type = string
+  default     = "US"
+  type        = string
 }
 
 variable "region" {
@@ -37,7 +37,7 @@ variable "location_id" {
 # IAM Variables
 variable "service_accounts" {
   description = "Map of service accounts"
-  type = map(string)
+  type        = map(string)
   default = {
     "gcr-service-account" = "GCR Service Account",
   }
@@ -46,11 +46,12 @@ variable "service_accounts" {
 variable "roles" {
   description = "List of IAM roles and their members"
   type        = map(list(string))
-  default = {}
+  default     = {}
 }
 
+# Storage Variables
 variable "bucket_name" {
   description = "Bucket Name"
-  default = "recipe_website_storage_bucket"
-  type = string
+  default     = "recipe_website_storage_bucket"
+  type        = string
 }
