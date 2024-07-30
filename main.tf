@@ -3,6 +3,15 @@ provider "google" {
   region  = var.region
 }
 
+# Data for currently authenticated Google Cloud account 
+data "google_client_config" "provider" {}
+
+provider "kubernetes" {
+  host                   = "https://${module.gke_cluster.cluster_endpoint}"
+  cluster_ca_certificate = base64decode(module.gke_cluster.cluster_ca_certificate)
+  token                  = data.google_client_config.provider.access_token
+}
+
 module "enable_apis" {
   source     = "./modules/enable_apis"
   project_id = var.project_id
@@ -12,7 +21,7 @@ module "enable_apis" {
   # ]
 }
 
-#IAM project roles and members
+# IAM project roles and members
 module "project_iam" {
   source     = "./modules/gcp_iam/project_iam"
   project_id = var.project_id
@@ -23,6 +32,9 @@ module "project_iam" {
   # IAM Bindings
   roles = {
     "roles/storage.admin" = [
+      "serviceAccount:${module.project_iam.service_accounts_data["gcr-service-account"].email}",
+    ],
+    "roles/container.admin" = [
       "serviceAccount:${module.project_iam.service_accounts_data["gcr-service-account"].email}",
     ]
   }
@@ -35,7 +47,7 @@ module "storage_iam" {
   storage_bucket_roles   = "roles/storage.objectViewer"
   storage_bucket_members = "allUsers"
 
-  depends_on = [ module.storage ]
+  depends_on = [module.storage]
 }
 
 # Storage Bucket for build / Note: Possibly change module name
@@ -52,7 +64,7 @@ module "gke_cluster" {
   machine_type = "e2-micro"
   node_count   = 1
 
-  depends_on = [ module.enable_apis ]
+  depends_on = [module.enable_apis]
 }
 
 module "node_pool" {
@@ -64,8 +76,20 @@ module "node_pool" {
   disk_type    = "pd-standard"
   disk_size_gb = 50
 
-  depends_on = [ module.enable_apis, module.gke_cluster ]
+  depends_on = [module.enable_apis, module.gke_cluster]
+}
+
+module "kubernetes_deployment" {
+  source     = "./modules/containers/kubernetes_deployment"
+  project_id = var.project_id
+}
+
+module "kubernetes_service" {
+  source = "./modules/containers/kubernetes_service"
 }
 
 # Whats next: Manage Terraform code & Deploy docker image
 # Note: Docker Image
+
+# Things to do, figure out cluster certificate
+# Remember to push image

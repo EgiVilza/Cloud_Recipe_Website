@@ -3,4 +3,4 @@ terraform.tfstate.backup
 .terraform.lock.hcl
 .terraform/
 terraform.tfstate
-notes
+notes.txt
