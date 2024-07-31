@@ -41,14 +41,14 @@ module "project_iam" {
 }
 
 # IAM Storage Bucket allUsers
-module "storage_iam" {
-  source                 = "./modules/gcp_iam/storage_iam"
-  bucket_name            = var.bucket_name
-  storage_bucket_roles   = "roles/storage.objectViewer"
-  storage_bucket_members = "allUsers"
+# module "storage_iam" {
+#   source                 = "./modules/gcp_iam/storage_iam"
+#   bucket_name            = var.bucket_name
+#   storage_bucket_roles   = "roles/storage.objectViewer"
+#   storage_bucket_members = "allUsers"
 
-  depends_on = [module.storage]
-}
+#   depends_on = [module.storage]
+# }
 
 # Storage Bucket for build / Note: Possibly change module name
 module "storage" {
@@ -82,14 +82,14 @@ module "node_pool" {
 module "kubernetes_deployment" {
   source     = "./modules/containers/kubernetes_deployment"
   project_id = var.project_id
+
+  depends_on = [ module.gke_cluster ]
 }
 
 module "kubernetes_service" {
   source = "./modules/containers/kubernetes_service"
+
+  depends_on = [ module.kubernetes_deployment ]
 }
 
-# Whats next: Manage Terraform code & Deploy docker image
-# Note: Docker Image
-
-# Things to do, figure out cluster certificate
-# Remember to push image
+# Whats next: Clean up code & See if Jenkins can be implemented

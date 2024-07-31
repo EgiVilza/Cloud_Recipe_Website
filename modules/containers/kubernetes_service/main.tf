@@ -1,17 +1,17 @@
 resource "kubernetes_service" "app" {
   metadata {
-    name = "app-service"
+    name      = "recipe-website-service"
     namespace = "default"
   }
 
   spec {
     selector = {
-      app = "app"
+      app = "recipe-website"
     }
 
     port {
-      port = 80
-      target_port = 8080
+      port        = 80
+      target_port = 80
     }
 
     type = "LoadBalancer"

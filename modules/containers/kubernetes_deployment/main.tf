@@ -1,6 +1,6 @@
 resource "kubernetes_deployment" "app" {
   metadata {
-    name = "recipe-website-deployment"
+    name      = "recipe-website-deployment"
     namespace = "default"
   }
 
@@ -9,24 +9,24 @@ resource "kubernetes_deployment" "app" {
 
     selector {
       match_labels = {
-        app = "app"
+        app = "recipe-website"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "app"
+          app = "recipe-website"
         }
       }
-      
+
       spec {
         container {
           image = "gcr.io/${var.project_id}/recipe-website"
-          name = "app"
+          name  = "recipe-website"
 
           port {
-            container_port = 8080
+            container_port = 80
           }
         }
       }
