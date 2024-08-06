@@ -12,6 +12,7 @@ provider "kubernetes" {
   token                  = data.google_client_config.provider.access_token
 }
 
+# Enable APIs
 module "enable_apis" {
   source     = "./modules/enable_apis"
   project_id = var.project_id
@@ -40,16 +41,6 @@ module "project_iam" {
   }
 }
 
-# IAM Storage Bucket allUsers
-# module "storage_iam" {
-#   source                 = "./modules/gcp_iam/storage_iam"
-#   bucket_name            = var.bucket_name
-#   storage_bucket_roles   = "roles/storage.objectViewer"
-#   storage_bucket_members = "allUsers"
-
-#   depends_on = [module.storage]
-# }
-
 # Storage Bucket for build / Note: Possibly change module name
 module "storage" {
   source      = "./modules/storage"
@@ -57,6 +48,7 @@ module "storage" {
   bucket_name = var.bucket_name
 }
 
+# GKE Cluster
 module "gke_cluster" {
   source       = "./modules/containers/gke_cluster"
   cluster_name = "my-gke-cluster"
@@ -67,6 +59,7 @@ module "gke_cluster" {
   depends_on = [module.enable_apis]
 }
 
+# Node Pool
 module "node_pool" {
   source       = "./modules/containers/node_pool"
   cluster_name = "my-gke-cluster"
@@ -79,6 +72,7 @@ module "node_pool" {
   depends_on = [module.enable_apis, module.gke_cluster]
 }
 
+# App Deployment
 module "kubernetes_deployment" {
   source     = "./modules/containers/kubernetes_deployment"
   project_id = var.project_id
@@ -86,10 +80,12 @@ module "kubernetes_deployment" {
   depends_on = [ module.gke_cluster ]
 }
 
+# App Service
 module "kubernetes_service" {
   source = "./modules/containers/kubernetes_service"
 
   depends_on = [ module.kubernetes_deployment ]
 }
 
-# Whats next: Clean up code & See if Jenkins can be implemented
+# Whats next: Update build to hide API keys & Implement a recipe mongoDB database
+# For later: Implement Jenkins
