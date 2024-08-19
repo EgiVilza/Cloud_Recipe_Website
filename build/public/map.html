@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regional Recipe Generator</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Recipe Generator</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/">Home</a></li>
+        <li><a href="#">World Recipes</a></li>
+        <li><a href="/advanced">Advanced</a></li>
+        <li><a href="savedrecipes.html">Saved</a></li>
+      </ul>
+    </div>
+  </nav>
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="/">Home</a></li>
+    <li><a href="#">World Recipes</a></li>
+    <li><a href="/advanced">Advanced</a></li>
+    <li><a href="savedrecipes.html">Saved</a></li>
+  </ul>
+
+
+  <div class="hero">
+    <div class="container" id="searchStyle">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <h2 id="indexTitle">World Recipes</h2>
+            <p class="mapTitle flow-text">Click on the map or select a region to view recipes from regions around the
+              world.
+            <p class="mapTitle">
+              *Due to Github's https restrictions, clicking on the map may not display recipes in the World Recipes page.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <a class='dropdown-trigger btn col s2 push-s5 regionButton' href='#'
+          data-target='dropdown-countries'>Regions</a>
+        <ul id='dropdown-countries' class='dropdown-content'>
+          <li><a data-country="American">American</a></li>
+          <li><a data-country="British">British</a></li>
+          <li><a data-country="Canadian">Canadian</a></li>
+          <li><a data-country="Chinese">Chinese</a></li>
+          <li><a data-country="Dutch">Dutch</a></li>
+          <li><a data-country="Egyptian">Egyptian</a></li>
+          <li><a data-country="French">French</a></li>
+          <li><a data-country="Greek">Greek</a></li>
+          <li><a data-country="Indian">Indian</a></li>
+          <li><a data-country="Irish">Irish</a></li>
+          <li><a data-country="Italian">Italian</a></li>
+          <li><a data-country="Jamaican">Jamaican</a></li>
+          <li><a data-country="Japanese">Japanese</a></li>
+          <li><a data-country="Kenyan">Kenyan</a></li>
+          <li><a data-country="Malaysian">Malaysian</a></li>
+          <li><a data-country="Mexican">Mexican</a></li>
+          <li><a data-country="Moroccan">Moroccan</a></li>
+          <li><a data-country="Polish">Polish</a></li>
+          <li><a data-country="Russian">Russian</a></li>
+          <li><a data-country="Spanish">Spanish</a></li>
+          <li><a data-country="Thai">Thai</a></li>
+          <li><a data-country="Tunisian">Tunisian</a></li>
+          <li><a data-country="Turkish">Turkish</a></li>
+          <li><a data-country="Vietnamese">Vietnamese</a></li>
+          <li><a data-country="Unknown">Unknown</a></li>
+
+        </ul>
+      </div>
+
+      <img id="map" class="mapImage responsive-img" name="map" src="map.jpg" alt="Map of Earth" width="900px" height="600px"
+        onclick="clickMapImage(event);" />
+
+      <div class="container" id="resultStyle">
+        <div class="row fullrow">
+          <div id="note">Click Recipes to Uncollapse</div>
+          <ul id="recipe-container" class="collapsible expandable"></ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>src="/map.js"</script>

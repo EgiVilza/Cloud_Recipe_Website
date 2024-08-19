@@ -88,4 +88,4 @@ module "kubernetes_service" {
 }
 
 # Whats next: Update build to hide API keys & Implement a recipe mongoDB database
-# For later: Implement Jenkins
+# For later: Fix sidebar bug

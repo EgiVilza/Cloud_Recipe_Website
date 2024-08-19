@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced Recipe Generator</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <!--Navigation Bar-->
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Recipe Generator</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/">Home</a></li>
+        <li><a href="/map">World Recipes</a></li>
+        <li><a href="#">Advanced</a></li>
+        <li><a href="savedrecipes.html">Saved</a></li>
+      </ul>
+    </div>
+  </nav>
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="/">Home</a></li>
+    <li><a href="/map">World Recipes</a></li>
+    <li><a href="#">Advanced</a></li>
+    <li><a href="savedrecipes.html">Saved</a></li>
+  </ul>
+
+
+  <!--Hero Image-->
+  <div class="hero">
+    <div class="container" id="searchStyle">
+      <div class="row">
+        <form class="col s12">
+          <h2 id="indexTitle">Advanced Search</h2>
+        </form>
+      </div>
+    </div>
+
+    <!--Advanced Search Form-->
+    <div class="container">
+      <div class="advancedFilters whiteBackground">
+        <div class="row">
+          <form>
+            <div class="col s12">
+              <div class="input-field">
+                <input id="icon_prefix" type="text" class="validate food">
+                <label for="icon_prefix">Food</label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--Calories Field-->
+        <div class="row">
+          <form>
+            <div class="input-field col s6">
+              <input id="icon_prefix" type="text" class="validate minCalories">
+              <label for="icon_prefix">Calories MIN</label>
+            </div>
+            <div class="input-field col s6">
+              <input id="icon_prefix" type="text" class="validate maxCalories">
+              <label for="icon_prefix">Calories MAX</label>
+            </div>
+          </form>
+        </div>
+        <!--Exclude Ingredients and Max # of recipes Field-->
+        <div class="row">
+          <form>
+            <div class="input-field col s6">
+              <input id="icon_prefix" type="text" class="validate excluded">
+              <label for="icon_prefix">Exclude Ingredients</label>
+            </div>
+            <div class="input-field col s6">
+              <input id="icon_prefix" type="text" class="validate numberOfIngredients">
+              <label for="icon_prefix"> Max # of recipes</label>
+            </div>
+          </form>
+        </div>
+
+        <!--Excluded Ingredients Field-->
+
+        <div class="row excludedIngredients">
+          <div class="row">
+            <div class="col s6 input-field addTo">
+              <a class="waves-effect waves-light btn addToButton">Exclude</a>
+            </div>
+            <div class="col s6">
+              <p id="excludedListTitle">Excluded List:</p>
+              <ul class=" excludedListing" id="uList">
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s6 input-field addTo">
+              <a class="waves-effect waves-light btn resetButton">Reset List</a>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <!--Health Labels Checkboxes-->
+        <div class="row healthLabels">
+          <p>Health Labels:</p>
+          <label>
+            <input type="checkbox" class="filled-in" id="vegan" />
+            <span>vegan</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="vegetarian" />
+            <span>vegetarian</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="peanut-free" />
+            <span>peanut-free</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="tree-nut-free" />
+            <span>tree-nut-free</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="alcohol-free" />
+            <span>alcohol-free</span>
+          </label>
+        </div>
+
+        <!--Diet Checkboxes-->
+        <div class="row diet">
+          <p>Diet:</p>
+          <label>
+            <input type="checkbox" class="filled-in" id="balanced" />
+            <span>balanced</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="high-fiber" />
+            <span>high-fiber</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="high-protein" />
+            <span>high-protein</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="low-carb" />
+            <span>low-carb</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="low-fat" />
+            <span>low-fat</span>
+          </label>
+          <label>
+            <input type="checkbox" class="filled-in" id="low-sodium" />
+            <span>low-sodium</span>
+          </label>
+        </div>
+        <!--Search Button-->
+        <div class="row">
+          <div class="col s1 input-field addTo">
+            <a class="waves-effect waves-light btn searchButton">Search</a>
+          </div>
+        </div>
+      </div>
+      <br>
+
+      <!--Recipe Results-->
+    </div>
+    <div class="container" id="resultStyle">
+      <div class="row fullrow">
+        <div class="container">
+          <div id="note">Click Recipes to Uncollapse</div>
+          <ul id="recipe-container" class="collapsible expandable"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>src = "/advanced.js"</script>
+
+</body>
+
+</html>
